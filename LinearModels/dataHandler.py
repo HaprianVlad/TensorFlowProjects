@@ -20,25 +20,30 @@ def read_data():
 	
 	print("Data is loading ...")
 	
-	if os.path.exists("data/train_file.dat"):
-   		train_file = open("data/train_file.dat", "r")	
+	data_dir = "data"
+	train_file_name = data_dir + "/train_file.dat"
+	test_file_name = data_dir + "/test_file.dat"
+
+	if not os.path.exists(data_dir):
+	    os.makedirs(data_dir)
+
+	
+	if os.path.exists(train_file_name):
+   		train_file = open(train_file_name, "r")	
 		
 	else:
-		train_file = open("data/train_file.dat", "w+")
+		train_file = open(train_file_name, "w+")
 		urllib.request.urlretrieve("https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data", train_file.name)
 
 
 
-	if os.path.exists("data/test_file.dat"):
-   		test_file = open("data/test_file.dat", "r")
+	if os.path.exists(test_file_name):
+   		test_file = open(test_file_name, "r")
 		
 	else:
-		test_file = open("data/test_file.dat", "w+")
+		test_file = open(test_file_name, "w+")
 		urllib.request.urlretrieve("https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data", test_file.name)
-	
-	print("Data is transforming ...")	
 
-	
 
 	df_train = pd.read_csv(train_file, names=COLUMNS, skipinitialspace=True)	
 	df_test = pd.read_csv(test_file, names=COLUMNS, skipinitialspace=True, skiprows=1)
@@ -47,7 +52,7 @@ def read_data():
 	df_train[LABEL_COLUMN] = (df_train["income_bracket"].apply(lambda x: ">50K" in x)).astype(int)
 	df_test[LABEL_COLUMN] = (df_test["income_bracket"].apply(lambda x: ">50K" in x)).astype(int)
 
-	print("Read data done !")	
+	print("Data loading done!")	
 	
 	train_file.close();
 	test_file.close();
