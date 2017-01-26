@@ -37,7 +37,11 @@ def runLearning(model_type, train_steps):
 		
 
 	if (model_type == "deep"):
-		m = tf.contrib.learn.DNNClassifier(feature_columns=deep_columns, model_dir=model_dir, hidden_units=[100, 50])
+		m = tf.contrib.learn.DNNClassifier(
+			feature_columns=deep_columns, 
+			model_dir=model_dir, 
+			hidden_units=[100, 50]
+			)
 		
 	
 	if (model_type == "wide_n_deep"):
@@ -51,10 +55,15 @@ def runLearning(model_type, train_steps):
 		
 
 	# TEST THE MODEL
-	print("Testing the model ...")
-	results = m.evaluate(input_fn=lambda:eval_input_fn(test_data), steps=1)
-	for key in sorted(results):
-	    print (str(key) + " : " + str(results[key]))
+	print("Testing the model on the train set ...")
+	train_results = m.evaluate(input_fn=lambda:train_input_fn(test_data), steps=1)
+	for key in sorted(train_results):
+	    print (str(key) + " : " + str(train_results[key]))
+
+	print("Testing the model on the test set ...")
+	test_results = m.evaluate(input_fn=lambda:eval_input_fn(test_data), steps=1)
+	for key in sorted(test_results):
+	    print (str(key) + " : " + str(test_results[key]))
 
 FLAGS = None
 
